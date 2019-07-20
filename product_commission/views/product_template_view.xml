@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="product_template_form_view_commission" model="ir.ui.view">
+            <field name="name">product.template.form.inherit.commission</field>
+            <field name="model">product.template</field>
+            <field name="priority">10</field>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <page name="invoicing" position="after">
+                    <page string="Commissions" name="commissions" groups="sales_team.group_sale_manager">
+                        <group>
+                            <group  colspan="4" string="Commissions">
+                                <field name="product_commission_ids" nolabel="1">
+                                  <tree string="Commissions" editable="bottom">
+                                      <field name="commission_id"/>
+                                      <field name="agent_id"/>
+                                  </tree>
+                                </field>
+                            </group>
+                        </group>
+                    </page>
+                </page>
+            </field>
+        </record>
+    </data>
+</odoo>
