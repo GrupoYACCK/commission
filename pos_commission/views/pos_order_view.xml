@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_pos_pos_form">
+            <field name="name">pos.order.form</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form" />
+            <field name="arch" type="xml">
+	            <!--field name="lines" position="attributes">
+                    <attribute name="context">{'partner_id': partner_id}</attribute>
+                </field-->
+                <xpath expr="//field[@name='lines']/tree//field[@name='price_subtotal']" position="after">
+                    <field name="commission_free" invisible="1"/>
+                    <field name="agents" invisible="1"/>
+                    <button name="button_edit_agents"
+                            icon="fa-users"
+                            attrs="{'invisible': ['|', ('commission_free', '=', True)]}"
+                            type="object"
+                    />
+                    <field name="commission_status"/>
+                </xpath>
+                <xpath expr="//field[@name='lines']/form//field[@name='price_subtotal']/.." position="after">
+                    <field name="commission_free"/>
+                    <field name="agents"
+                           attrs="{'readonly': [('commission_free', '=', True)]}"/>
+                </xpath>
+                <field name="amount_total" position="after">
+                    <field name="commission_total"
+                           widget="monetary"/>
+                </field>
+                <xpath expr="//field[@name='note']" position="after">
+                    <group name="group_recompute_commission">
+                        <button name="recompute_lines_agents" type="object" string="Recompute lines agents" states="draft,sent"></button>
+                    </group>
+                </xpath>                         
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_pos_order_line_tree">
+        <field name="name">pos.order.line.agent.tree</field>
+        <field name="model">pos.order.line.agent</field>
+        <field name="arch" type="xml">
+            <tree string="Agents" editable="bottom">
+                <field name="agent"
+                       context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}"
+                />
+                <field name="commission"/>
+                <field name="amount"/>
+            </tree>
+        </field>
+    </record>
+    </data>
+</odoo>
