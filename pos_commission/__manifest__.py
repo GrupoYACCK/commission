@@ -25,5 +25,9 @@
     'data': [
         # 'security/ir.model.access.csv',
         'views/pos_order_view.xml',
+        'views/pos_commission_template.xml'
+    ],
+    'qweb': [
+        'static/src/xml/pos.xml'
     ],
 }

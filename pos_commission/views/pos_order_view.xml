@@ -9,6 +9,11 @@
 	            <!--field name="lines" position="attributes">
                     <attribute name="context">{'partner_id': partner_id}</attribute>
                 </field-->
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="agent_ids" attrs="{'readonly': [('state', 'not in', ['draft'])]}" options="{'no_create_edit': True}" widget="many2many_tags" />
+                </xpath>
+                
+                
                 <xpath expr="//field[@name='lines']/tree//field[@name='price_subtotal']" position="after">
                     <field name="commission_free" invisible="1"/>
                     <field name="agents" invisible="1"/>

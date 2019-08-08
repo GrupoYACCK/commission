@@ -7,6 +7,33 @@ from odoo import api, fields, models
 class PosOrder(models.Model):
     _inherit = "pos.order"
 
+    agent_ids = fields.Many2many("res.partner", string = "Agents", domain = [('agent','=', True)],
+                                 compute = "_compute_agent_ids", inverse = "_inverse_agent_ids")
+    
+    @api.model
+    def _order_fields(self, ui_order):
+        res = super(PosOrder, self)._order_fields(ui_order)
+        res['agent_ids'] = ui_order.get('agent_ids', [])
+        return res
+    
+    @api.multi
+    def _compute_agent_ids(self):
+        for order in self:
+            order.agent_ids = order.lines.mapped("agents").mapped("agent").ids
+
+    @api.multi
+    def _inverse_agent_ids(self):
+        for order in self:
+            order.lines.mapped("agents").unlink()
+            for line_id in order.lines:
+                if not line_id.product_id.commission_free:
+                    for agent_id in order.agent_ids:
+                        vals = {}
+                        vals['object_id'] = line_id.id
+                        vals['agent'] = agent_id.id
+                        vals['commission'] = line_id.product_id.get_commission_by_product(agent_id.id) or agent_id.commission.id
+                        self.env['pos.order.line.agent'].create(vals)
+
     @api.depends('lines.agents.amount')
     def _compute_commission_total(self):
         for record in self:
@@ -26,7 +53,7 @@ class PosOrder(models.Model):
     def _action_create_invoice_line(self, line=False, invoice_id=False):
         line_id = super(PosOrder, self)._action_create_invoice_line(line=line, invoice_id=invoice_id)
         if line_id:
-            vals = line._prepare_invoice_line()
+            vals = line._prepare_invoice_line(line.qty)
             line_id.write(vals)
         return line_id
 
@@ -89,5 +116,5 @@ class PosOrderLineAgent(models.Model):
             order_line = line.object_id
             line.amount = line._get_commission_amount(
                 line.commission, order_line.price_subtotal,
-                order_line.product_id, order_line.product_uom_qty,
+                order_line.product_id, order_line.qty,
             )

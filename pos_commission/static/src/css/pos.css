@@ -1,0 +1,73 @@
+.pos .agents-container {
+    width: 50%;
+    display:inline-block;
+    padding: 16px;
+    padding-left: 16px;
+	padding-left: 0;
+	float: right;
+}
+
+.payment-screen .agents-container .button {
+    line-height: 73px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.payment-screen .agents-container .button {
+    background: #e2e2e2;
+    line-height: 73px;
+    font-size: 16px;
+    padding: 0px 8px;
+    border: solid 1px rgb(200,200,200);
+    border-top-width: 0;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    transition: background-color, border-color, color 150ms linear;
+}
+.payment-screen .agents-container .button:hover {
+    background-color: #efefef;
+}
+.payment-screen .agents-container .button:first-child {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-top-width: 1px;
+}
+.payment-screen .agents-container .button:last-child {
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+.payment-screen .agents-container .button.highlight:not(:first-child) {
+    margin-top: -1px;
+    border-top: solid 1px;
+}
+.payment-screen .agents-container .button:active {
+    background: black;
+    border-color: black;
+    color: white;
+}
+.payment-screen .agents-container .button.highlight .fa {
+    border-color: rgba(0, 0, 0, 0.109804);
+    background: rgba(0, 0, 0, 0.0980392);
+}
+.payment-screen .agents-container .button .fa {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    margin-top: -25px;
+    vertical-align: middle;
+    border-radius: 26px;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+    background: rgba(255,255,255,0.4);
+    font-size: 20px;
+    transition: all 150ms linear;
+}
