@@ -2,6 +2,7 @@
 
 from odoo import api, models
 
+
 class AccountInvoiceLineAgent(models.Model):
     _inherit = "account.invoice.line.agent"
 

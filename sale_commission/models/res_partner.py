@@ -66,8 +66,8 @@ class ResPartner(models.Model):
         if vals.get('agents'):
             for record in self:
                 childs = record.mapped('child_ids').filtered(lambda r: (
-                    (not r.agents or r.agents == record.agents) and
-                    not r.is_company
+                        (not r.agents or r.agents == record.agents) and
+                        not r.is_company
                 ))
                 if childs:
                     childs.write({'agents': vals['agents']})

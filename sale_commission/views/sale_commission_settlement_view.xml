@@ -12,7 +12,7 @@
                 <field name="date_from"/>
                 <field name="date_to"/>
                 <field name="total"
-                       sum="Settled total" />
+                       sum="Settled total"/>
                 <field name="state"/>
             </tree>
         </field>
@@ -29,7 +29,7 @@
                 <field name="company_id"/>
                 <filter string="This year"
                         name="thisyear"
-                        domain="[('date_from', '&gt;=', time.strftime('%%Y-01-01')), ('date_to', '&lt;=', time.strftime('%%Y-12-31'))]" />
+                        domain="[('date_from', '&gt;=', time.strftime('%%Y-01-01')), ('date_to', '&lt;=', time.strftime('%%Y-12-31'))]"/>
                 <separator/>
                 <group expand="1" string="Group By">
                     <filter string="Agent" name="group_agent" context="{'group_by': 'agent'}"/>
@@ -49,11 +49,11 @@
                             attrs="{'invisible': ['|', ('state', '!=', 'settled'), ('agent_type', '!=', 'agent')]}"
                             class="oe_highlight"
                             type="object"
-                            name="action_invoice" />
+                            name="action_invoice"/>
                     <button string="Cancel"
                             states="settled"
                             type="object"
-                            name="action_cancel" />
+                            name="action_cancel"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <group>
@@ -115,7 +115,7 @@
                 <field name="commission"/>
                 <filter string="This year"
                         name="thisyear"
-                        domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]" />
+                        domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]"/>
                 <separator/>
                 <group expand="1" string="Group By">
                     <filter string="Agent" name="group_agent" context="{'group_by': 'agent'}"/>
@@ -148,7 +148,7 @@
     <menuitem name="Settlements"
               id="menu_settle_commissions"
               parent="menu_sale_commissions_management"
-              action="action_settle_commission" />
+              action="action_settle_commission"/>
 
 
 </odoo>

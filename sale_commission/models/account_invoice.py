@@ -82,7 +82,7 @@ class AccountInvoiceLine(models.Model):
         agents_vals = vals.get('agents', [(6, 0, [])])
         invoice_id = vals.get('invoice_id', False)
         if (agents_vals and agents_vals[0][0] == 6 and not
-                agents_vals[0][2] and invoice_id):
+        agents_vals[0][2] and invoice_id):
             inv = self.env['account.invoice'].browse(invoice_id)
             vals['agents'] = self._prepare_agents_vals_partner(inv.partner_id)
         return super().create(vals)
@@ -177,6 +177,6 @@ class AccountInvoiceLineAgent(models.Model):
         """
         self.ensure_one()
         return (
-            self.commission.invoice_state == 'paid' and
-            self.invoice.state != 'paid'
-        ) or (self.invoice.state not in ('open', 'paid'))
+                       self.commission.invoice_state == 'paid' and
+                       self.invoice.state != 'paid'
+               ) or (self.invoice.state not in ('open', 'paid'))

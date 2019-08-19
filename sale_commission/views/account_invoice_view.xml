@@ -8,9 +8,9 @@
         <field name="arch" type="xml">
             <tree string="Invoice line agents and commissions" editable="bottom">
                 <field name="agent"
-                       context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}" />
-                <field name="commission" />
-                <field name="amount" />
+                       context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}"/>
+                <field name="commission"/>
+                <field name="amount"/>
             </tree>
         </field>
     </record>
@@ -18,7 +18,7 @@
     <record id="invoice_line_form_agent" model="ir.ui.view">
         <field name="name">account.invoice.line.form.agent</field>
         <field name="model">account.invoice.line</field>
-        <field name="inherit_id" ref="account.view_invoice_line_form" />
+        <field name="inherit_id" ref="account.view_invoice_line_form"/>
         <field name="arch" type="xml">
             <field name="company_id" position="after">
                 <field name="commission_free"/>
@@ -31,7 +31,7 @@
     <record id="invoice_form_agent" model="ir.ui.view">
         <field name="name">account.invoice.form.agent</field>
         <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_form" />
+        <field name="inherit_id" ref="account.invoice_form"/>
         <field name="arch" type="xml">
             <field name="invoice_line_ids" position="attributes">
                 <attribute name="context">{'partner_id': partner_id}</attribute>
@@ -48,7 +48,8 @@
                 <field name="commission_status"/>
             </xpath>
             <xpath expr="//field[@name='invoice_line_ids']" position="after">
-                <button name="recompute_lines_agents" type="object" string="Recompute lines agents" states="draft"></button>
+                <button name="recompute_lines_agents" type="object" string="Recompute lines agents"
+                        states="draft"></button>
             </xpath>
             <field name="amount_total" position="after">
                 <field name="commission_total"

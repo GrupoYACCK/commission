@@ -77,8 +77,8 @@ class SaleCommissionMixin(models.AbstractModel):
         """Force a recomputation of the agents according prepare method."""
         for record in self:
             record.agents = (
-                [(3, x.id) for x in record.agents] +
-                record._prepare_agents_vals()
+                    [(3, x.id) for x in record.agents] +
+                    record._prepare_agents_vals()
             )
 
     def button_edit_agents(self):

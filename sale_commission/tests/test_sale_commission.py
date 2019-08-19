@@ -346,14 +346,14 @@ class TestSaleCommission(SavepointCase):
         self.partner.agents = [(6, 0, [sale_agent.id])]
         saleorder = self.sale_order_model.with_context(
             partner_id=self.partner.id).create({
-                'partner_id': self.partner.id,
-                'order_line': [(0, 0, {
-                    'name': self.product.name,
-                    'product_id': self.product.id,
-                    'product_uom_qty': 8.0,
-                    'product_uom': self.ref('product.product_uom_unit'),
-                })],
-            })
+            'partner_id': self.partner.id,
+            'order_line': [(0, 0, {
+                'name': self.product.name,
+                'product_id': self.product.id,
+                'product_uom_qty': 8.0,
+                'product_uom': self.ref('product.product_uom_unit'),
+            })],
+        })
         self.assertNotEqual(
             len(saleorder.mapped('order_line.agents')), 0,
             "There should be a agent assigned to the lines."
@@ -492,8 +492,8 @@ class TestSaleCommission(SavepointCase):
         self.assertEqual(2, len(settlements))
         self.assertTrue(settlements.filtered(lambda r: r.total < 0))
         with patch.object(
-            Settlement,
-            'create_invoice_header', return_value=agent_invoice
+                Settlement,
+                'create_invoice_header', return_value=agent_invoice
         ):
             wizard2 = self.make_inv_model.create({
                 'product': 1,

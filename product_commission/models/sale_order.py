@@ -2,6 +2,7 @@
 
 from odoo import api, models
 
+
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
@@ -9,9 +10,10 @@ class SaleOrderLine(models.Model):
         res = super(SaleOrderLine, self)._prepare_agents_vals()
         return res
 
+
 class SaleOrderLineAgent(models.Model):
     _inherit = "sale.order.line.agent"
-    
+
     @api.onchange('agent')
     def onchange_agent(self):
         commision = False
