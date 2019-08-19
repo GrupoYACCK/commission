@@ -2,31 +2,246 @@
 
 <templates id="template" xml:space="preserve">
 	<t t-extend="PaymentScreenWidget">
-		<t t-jquery='div[class="payment-buttons"]' t-operation="after">
-			<section class='agents-container'>
-				<div class='button js_set_agent1'>
-                            <i class='fa fa-user' /> 
-                            <span class='js_customer_name'> 
-                                <t t-if="widget.pos.get_client()">
-                                    <t t-esc="widget.pos.get_client().name" />
-                                </t>
-                                <t t-if="!widget.pos.get_client()">
-                                    Agent1
-                                </t>
-                            </span>
-                        </div>
-                <div class='button js_set_agent2'>
-                            <i class='fa fa-user' /> 
-                            <span class='js_customer_name'> 
-                                <t t-if="widget.pos.get_client()">
-                                    <t t-esc="widget.pos.get_client().name" />
-                                </t>
-                                <t t-if="!widget.pos.get_client()">
-                                    Agent2
-                                </t>
-                            </span>
-                        </div>
-        	</section>
+		<t t-jquery='div[class="payment-buttons"]' t-operation="append">
+            <br/>
+            <br/>
+            <h2>Agents</h2>
+            <div class='button js_set_agent1'>
+                <i class='fa fa-user'/>
+                <span class='js_agent_1_name'>
+                    <t t-if="widget.pos.get_agent_1()">
+                        <t t-esc="widget.pos.get_agent_1().name"/>
+                    </t>
+                    <t t-if="!widget.pos.get_agent_1()">
+                        Agent 1
+                    </t>
+                </span>
+            </div>
+            <div class='button js_set_agent2'>
+                <i class='fa fa-user'/>
+                <span class='js_agent_2_name'>
+                    <t t-if="widget.pos.get_agent_2()">
+                        <t t-esc="widget.pos.get_agent_2().name"/>
+                    </t>
+                    <t t-if="!widget.pos.get_agent_2()">
+                        Agent 2
+                    </t>
+                </span>
+            </div>
 		</t>
 	</t>
+
+    <t t-name="AgentLine">
+        <tr class='client-line' t-att-data-id='agent.id'>
+            <td><t t-esc='agent.name' /></td>
+            <td><t t-esc='agent.address' /></td>
+            <td><t t-esc='agent.phone or agent.mobile or ""' /></td>
+        </tr>
+    </t>
+
+    <t t-name="AgentDetailsEdit">
+        <section class='client-details edit'>
+            <div class='client-picture'>
+                <t t-if='!agent.id'>
+                    <i class='fa fa-camera'></i>
+                </t>
+                <t t-if='agent.id'>
+                    <img t-att-src='widget.agent_icon_url(agent.id)'/>
+                </t>
+                <input type='file' class='image-uploader'></input>
+            </div>
+            <input class='detail client-name' name='name' t-att-value='agent.name' placeholder='Name'></input>
+            <div class='edit-buttons'>
+                <div class='button undo'><i class='fa fa-undo' /></div>
+                <div class='button save'><i class='fa fa-floppy-o' /></div>
+            </div>
+            <div class='client-details-box clearfix'>
+                <div class='client-details-left'>
+                    <div class='client-detail'>
+                        <span class='label'>Street</span>
+                        <input class='detail client-address-street' name='street' t-att-value='agent.street || ""'
+                               placeholder='Street'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>City</span>
+                        <input class='detail client-address-city' name='city' t-att-value='agent.city || ""'
+                               placeholder='City'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Postcode</span>
+                        <input class='detail client-address-zip' name='zip' t-att-value='agent.zip || ""'
+                               placeholder='ZIP'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Country</span>
+                        <select class='detail client-address-country needsclick' name='country_id'>
+                            <option value=''>None</option>
+                            <t t-foreach='widget.pos.countries' t-as='country'>
+                                <option t-att-value='country.id'
+                                        t-att-selected="agent.country_id ? ((country.id === agent.country_id[0]) ? true : undefined) : undefined">
+                                    <t t-esc='country.name'/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class='client-details-right'>
+                    <div class='client-detail'>
+                        <span class='label'>Email</span>
+                        <input class='detail client-email' name='email' type='email'
+                               t-att-value='agent.email || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Phone</span>
+                        <input class='detail client-phone' name='phone' type='tel'
+                               t-att-value='agent.phone || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Barcode</span>
+                        <input class='detail barcode' name='barcode' t-att-value='agent.barcode || ""'></input>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Tax ID</span>
+                        <input class='detail vat' name='vat' t-att-value='agent.vat || ""'></input>
+                    </div>
+                    <div t-attf-class='client-detail #{widget.pos.pricelists.length &lt;= 1 ? "oe_hidden" : ""}'>
+                        <span class='label'>Pricelist</span>
+                        <select class='detail needsclick' name='property_product_pricelist'>
+                            <t t-foreach='widget.pos.pricelists' t-as='pricelist'>
+                                <option t-att-value='pricelist.id'
+                                        t-att-selected="agent.property_product_pricelist ? (pricelist.id === agent.property_product_pricelist[0] ? true : undefined) : undefined">
+                                    <t t-esc='pricelist.display_name'/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+
+    <t t-name="AgentDetails">
+        <section class='client-details'>
+            <div class='client-picture'>
+                <img t-att-src='widget.agent_icon_url(agent.id)'/>
+            </div>
+            <div class='client-name'><t t-esc='agent.name' /></div>
+            <div class='edit-buttons'>
+                <div class='button edit'><i class='fa fa-pencil-square' /></div>
+            </div>
+            <div class='client-details-box clearfix'>
+                <div class='client-details-left'>
+                    <div class='client-detail'>
+                        <span class='label'>Address</span>
+                        <t t-if='agent.address'>
+                            <span class='detail client-address'><t t-esc='agent.address' /></span>
+                        </t>
+                        <t t-if='!agent.address'>
+                            <span class='detail client-address empty'>N/A</span>
+                        </t>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Email</span>
+                        <t t-if='agent.email'>
+                            <span class='detail client-email'><t t-esc='agent.email' /></span>
+                        </t>
+                        <t t-if='!agent.email'>
+                            <span class='detail client-email empty'>N/A</span>
+                        </t>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Phone</span>
+                        <t t-if='agent.phone'>
+                            <span class='detail client-phone'><t t-esc='agent.phone' /></span>
+                        </t>
+                        <t t-if='!agent.phone'>
+                            <span class='detail client-phone empty'>N/A</span>
+                        </t>
+                    </div>
+                </div>
+                <div class='client-details-right'>
+                    <div class='client-detail'>
+                        <span class='label'>Barcode</span>
+                        <t t-if='agent.barcode'>
+                            <span class='detail client-id'><t t-esc='agent.barcode'/></span>
+                        </t>
+                        <t t-if='!agent.barcode'>
+                            <span class='detail client-id empty'>N/A</span>
+                        </t>
+                    </div>
+                    <div class='client-detail'>
+                        <span class='label'>Tax ID</span>
+                        <t t-if='agent.vat'>
+                            <span class='detail vat'><t t-esc='agent.vat'/></span>
+                        </t>
+                        <t t-if='!agent.vat'>
+                            <span class='detail vat empty'>N/A</span>
+                        </t>
+                    </div>
+                    <div t-attf-class='client-detail #{widget.pos.pricelists.length &lt;= 1 ? "oe_hidden" : ""}'>
+                        <span class='label'>Pricelist</span>
+                        <t t-if='agent.property_product_pricelist'>
+                            <span class='detail property_product_pricelist'><t t-esc='agent.property_product_pricelist[1]'/></span>
+                        </t>
+                        <t t-if='!agent.property_product_pricelist'>
+                            <span class='detail property_product_pricelist empty'>N/A</span>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+
+    <t t-name="AgentListScreenWidget">
+        <div class="clientlist-screen screen">
+            <div class="screen-content">
+                <section class="top-content">
+                    <span class='button back'>
+                        <i class='fa fa-angle-double-left'></i>
+                        Cancel
+                    </span>
+                    <span class='searchbox'>
+                        <input placeholder='Search Agents'/>
+                        <span class='search-clear'></span>
+                    </span>
+                    <span class='searchbox'></span>
+                    <span class='button new-customer'>
+                        <i class='fa fa-user'></i>
+                        <i class='fa fa-plus'></i>
+                    </span>
+                    <span class='button next oe_hidden highlight'>
+                        Select Agent
+                        <i class='fa fa-angle-double-right'></i>
+                    </span>
+                </section>
+                <section class="full-content">
+                    <div class='window'>
+                        <section class='subwindow collapsed'>
+                            <div class='subwindow-container collapsed'>
+                                <div class='subwindow-container-fix client-details-contents'>
+                                </div>
+                            </div>
+                        </section>
+                        <section class='subwindow'>
+                            <div class='subwindow-container'>
+                                <div class='subwindow-container-fix touch-scrollable scrollable-y'>
+                                    <table class='client-list'>
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Address</th>
+                                                <th>Phone</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class='client-list-contents'>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </t>
 </templates>
