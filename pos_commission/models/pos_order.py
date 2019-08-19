@@ -7,15 +7,15 @@ from odoo import api, fields, models
 class PosOrder(models.Model):
     _inherit = "pos.order"
 
-    agent_ids = fields.Many2many("res.partner", string = "Agents", domain = [('agent','=', True)],
-                                 compute = "_compute_agent_ids", inverse = "_inverse_agent_ids")
-    
+    agent_ids = fields.Many2many("res.partner", string="Agents", domain=[('agent', '=', True)],
+                                 compute="_compute_agent_ids", inverse="_inverse_agent_ids")
+
     @api.model
     def _order_fields(self, ui_order):
         res = super(PosOrder, self)._order_fields(ui_order)
         res['agent_ids'] = ui_order.get('agent_ids', [])
         return res
-    
+
     @api.multi
     def _compute_agent_ids(self):
         for order in self:
@@ -31,7 +31,8 @@ class PosOrder(models.Model):
                         vals = {}
                         vals['object_id'] = line_id.id
                         vals['agent'] = agent_id.id
-                        vals['commission'] = line_id.product_id.get_commission_by_product(agent_id.id) or agent_id.commission.id
+                        vals['commission'] = line_id.product_id.get_commission_by_product(
+                            agent_id.id) or agent_id.commission.id
                         self.env['pos.order.line.agent'].create(vals)
 
     @api.depends('lines.agents.amount')
@@ -57,6 +58,11 @@ class PosOrder(models.Model):
             line_id.write(vals)
         return line_id
 
+    @api.model
+    def create_from_ui(self, orders):
+        # TODO: poner aqui la asignacion de los AGENTES que vienen desde la INTERFAZ en la orden
+        return super(PosOrder, self).create_from_ui(orders)
+
 
 class PosOrderLine(models.Model):
     _inherit = [
@@ -80,17 +86,17 @@ class PosOrderLine(models.Model):
             vals['agents'] = self._prepare_agents_vals_partner(
                 order.partner_id,
             )
-        return super().create(vals)
+        return super(PosOrderLine, self).create(vals)
 
     def _prepare_agents_vals(self):
         self.ensure_one()
-        res = super()._prepare_agents_vals()
+        res = super(PosOrderLine, self)._prepare_agents_vals()
         return res + self._prepare_agents_vals_partner(
             self.order_id.partner_id,
         )
 
     def _prepare_invoice_line(self, qty):
-        #vals = super(PosOrderLine, self)._prepare_invoice_line(qty)
+        # vals = super(PosOrderLine, self)._prepare_invoice_line(qty)
         vals = {}
         vals['agents'] = [
             (0, 0, {'agent': x.agent.id,

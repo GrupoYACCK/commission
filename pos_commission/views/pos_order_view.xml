@@ -4,16 +4,17 @@
         <record model="ir.ui.view" id="view_pos_pos_form">
             <field name="name">pos.order.form</field>
             <field name="model">pos.order</field>
-            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form" />
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
             <field name="arch" type="xml">
-	            <!--field name="lines" position="attributes">
+                <!--field name="lines" position="attributes">
                     <attribute name="context">{'partner_id': partner_id}</attribute>
                 </field-->
                 <xpath expr="//field[@name='partner_id']" position="after">
-                    <field name="agent_ids" attrs="{'readonly': [('state', 'not in', ['draft'])]}" options="{'no_create_edit': True}" widget="many2many_tags" />
+                    <field name="agent_ids" attrs="{'readonly': [('state', 'not in', ['draft'])]}"
+                           options="{'no_create_edit': True}" widget="many2many_tags"/>
                 </xpath>
-                
-                
+
+
                 <xpath expr="//field[@name='lines']/tree//field[@name='price_subtotal']" position="after">
                     <field name="commission_free" invisible="1"/>
                     <field name="agents" invisible="1"/>
@@ -35,24 +36,25 @@
                 </field>
                 <xpath expr="//field[@name='note']" position="after">
                     <group name="group_recompute_commission">
-                        <button name="recompute_lines_agents" type="object" string="Recompute lines agents" states="draft,sent"></button>
+                        <button name="recompute_lines_agents" type="object" string="Recompute lines agents"
+                                states="draft,sent"></button>
                     </group>
-                </xpath>                         
+                </xpath>
             </field>
         </record>
 
         <record model="ir.ui.view" id="view_pos_order_line_tree">
-        <field name="name">pos.order.line.agent.tree</field>
-        <field name="model">pos.order.line.agent</field>
-        <field name="arch" type="xml">
-            <tree string="Agents" editable="bottom">
-                <field name="agent"
-                       context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}"
-                />
-                <field name="commission"/>
-                <field name="amount"/>
-            </tree>
-        </field>
-    </record>
+            <field name="name">pos.order.line.agent.tree</field>
+            <field name="model">pos.order.line.agent</field>
+            <field name="arch" type="xml">
+                <tree string="Agents" editable="bottom">
+                    <field name="agent"
+                           context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}"
+                    />
+                    <field name="commission"/>
+                    <field name="amount"/>
+                </tree>
+            </field>
+        </record>
     </data>
 </odoo>

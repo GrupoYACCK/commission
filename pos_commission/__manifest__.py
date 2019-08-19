@@ -20,7 +20,7 @@
 
     # any module necessary for this one to work correctly
     'depends': ['sale_commission', 'product_commission', 'point_of_sale', 'account_accountant',
-    'pos_journal_sequence'],
+                'pos_journal_sequence'],
 
     # always loaded
     'data': [
