@@ -787,10 +787,25 @@ odoo.define('pos_commission.pos_commission', function (require) {
             this.set('agent_2',agent);
         },
 
+        get_agent_ids: function(){
+            var agent_ids = [];
+            if (this.get_agent_1() || this.get_agent_2()) {
+                if (this.get_agent_1()){
+                    agent_ids.push(this.get_agent_1().id);
+                }
+                if (this.get_agent_2()){
+                    agent_ids.push(this.get_agent_2().id);
+                }
+                   
+            }
+            return agent_ids;
+        },
+
         export_as_JSON: function() {
             var res = OrderSuper.prototype.export_as_JSON.apply(this, arguments);
-            res['agent_1'] = this.get_agent_1() ? this.get_agent_1().id : false;
-            res['agent_2'] = this.get_agent_2() ? this.get_agent_2().id : false;
+            //res['agent_1'] = this.get_agent_1() ? this.get_agent_1().id : false;
+            //res['agent_2'] = this.get_agent_2() ? this.get_agent_2().id : false;
+            res['agent_ids'] = this.get_agent_ids();
             return res;
         },
 
