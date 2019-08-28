@@ -144,15 +144,31 @@ odoo.define('pos_commission.pos_commission', function (require) {
             // Business data; loaded from the server at launch
             this.agents = [];
 
+            self.models[5].fields.push('commission');
+            self.models[5].fields.push('agent');
+            self.models[5].domain = ['|',['agent','=',true],['customer','=',true]];
+            self.models[5].loaded = function(self,partners){
+                var partners_obj = [];
+                var agents_obj = [];
+                for (var i = 0; i < partners.length; i++) {
+                    if(partners[i].agent){
+                        agents_obj.push(partners[i]);
+                    }
+                    if(partners[i].customer){
+                        partners_obj.push(partners[i]);
+                    }
+                }
+                self.partners = partners_obj;
+                self.db.add_partners(partners_obj);
+                self.agents = agents_obj;
+                self.db.add_agents(agents_obj);
+            };
+
             self.models.push({
-                model:  'res.partner',
-                fields: ['name','street','city','state_id','country_id','vat',
-                         'phone','zip','mobile','email','barcode','write_date',
-                         'property_account_position_id','property_product_pricelist'],
-                domain: [['agent','=',true]],
-                loaded: function(self, agents){
-                    self.agents = agents;
-                    self.db.add_agents(agents);
+                model:  'sale.commission',
+                fields: ['name'],
+                loaded: function(self, commissions){
+                    self.commissions = commissions;
                 },
             });
 
@@ -525,6 +541,9 @@ odoo.define('pos_commission.pos_commission', function (require) {
 
             fields.id           = agent.id || false;
             fields.country_id   = fields.country_id || false;
+            fields.agent        = true;
+            fields.customer     = false;
+            fields.supplier     = false;            
 
             if (fields.property_product_pricelist) {
                 fields.property_product_pricelist = parseInt(fields.property_product_pricelist, 10);

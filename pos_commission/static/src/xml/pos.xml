@@ -84,6 +84,18 @@
                             </t>
                         </select>
                     </div>
+                    <div class='client-detail'>
+                        <span class='label'>Commission</span>
+                        <select class='detail client-commission needsclick' name='commission'>
+                            <option value=''>None</option>
+                            <t t-foreach='widget.pos.commissions' t-as='commission_id'>
+                                <option t-att-value='commission_id.id'
+                                        t-att-selected="agent.commission ? ((commission_id.id === agent.commission[0]) ? true : undefined) : undefined">
+                                    <t t-esc='commission_id.name'/>
+                                </option>
+                            </t>
+                        </select>
+                    </div>
                 </div>
                 <div class='client-details-right'>
                     <div class='client-detail'>
