@@ -146,6 +146,7 @@ odoo.define('pos_commission.pos_commission', function (require) {
 
             self.models[5].fields.push('commission');
             self.models[5].fields.push('agent');
+            self.models[5].fields.push('customer');
             self.models[5].domain = ['|',['agent','=',true],['customer','=',true]];
             self.models[5].loaded = function(self,partners){
                 var partners_obj = [];
