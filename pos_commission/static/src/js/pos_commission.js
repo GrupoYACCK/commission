@@ -143,7 +143,7 @@ odoo.define('pos_commission.pos_commission', function (require) {
 
             // Business data; loaded from the server at launch
             this.agents = [];
-
+            this.commissions = [];
             self.models[5].fields.push('commission');
             self.models[5].fields.push('agent');
             self.models[5].fields.push('customer');
